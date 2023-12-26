@@ -1,3 +1,3 @@
-Aleksi Lummila's Python, Javascript and C# training
+Aleksi Lummila's training projects
 
-This repo contains three versions of a function, that takes in an amount of layers and then builds a pyramid from them to the console.
+pyramidi/ contains a function, that takes in an amount of layers, then returns a pyramid of given height to the console, written in Python, Javascript and C#.
