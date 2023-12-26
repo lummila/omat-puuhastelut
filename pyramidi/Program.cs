@@ -1,4 +1,6 @@
-﻿class Pyramid
+﻿using System;
+
+class Pyramid
 {
     public static void Main()
     {
