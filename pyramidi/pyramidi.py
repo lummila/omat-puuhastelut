@@ -1,7 +1,5 @@
 def pyramid(layers):
-    stars = 1
-    for i in range(layers - 1):
-        stars += 2
+    stars = layers * 2 - 1
 
     output = []
     for i in range(layers):
