@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class Pyramid
 {
@@ -17,7 +18,7 @@ class Pyramid
 
     public static List<string> PyramidBuilder(int layers)
     {
-        List<string> output = new(layers);
+        List<string> output = new List<string>(layers);
         int blankSpace = layers * 2 - 1;
 
         for (int i = 0; i < layers; i++)
