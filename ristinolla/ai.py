@@ -50,6 +50,33 @@ class Ai:
                             # - - O
                             m[down_far][right_far] = "O"
                             return
+                        # X - x
+                        # - - -
+                        # - - -
+                        if m[row][right] == " " and m[row][right_far] == "X":
+                            # X O x
+                            # - - -
+                            # - - -
+                            m[row][right] = "O"
+                            return
+                        # X - -
+                        # - - -
+                        # - - x
+                        if m[down][right] == " " and m[down_far][right_far] == "X":
+                            # X - -
+                            # - O -
+                            # - - x
+                            m[down][right] = "O"
+                            return
+                        # X - -
+                        # - - -
+                        # x - -
+                        if m[down][column] == " " and m[down_far][column] == "X":
+                            # X - -
+                            # O - -
+                            # x - -
+                            m[down][column] = "O"
+                            return
                         # X - -
                         # - - -
                         # - - -
@@ -58,15 +85,6 @@ class Ai:
                             # - O -
                             # - - -
                             m[down][right] = "O"
-                            return
-                        # X - -
-                        # - - -
-                        # - - -
-                        if m[row][right] == " ":
-                            # X O -
-                            # - - -
-                            # - - -
-                            m[row][right] = "O"
                             return
 
                     # - X -
@@ -99,6 +117,15 @@ class Ai:
                             # - x -
                             # - O -
                             m[down_far][column] = "O"
+                            return
+                        # - X -
+                        # - - -
+                        # - x -
+                        if m[down_far][column] == "X" and m[down][column] == " ":
+                            # - X -
+                            # - O -
+                            # - x -
+                            m[down][column] = "O"
                             return
                         # - X -
                         # - - -
