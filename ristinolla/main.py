@@ -1,4 +1,9 @@
-import random
+"""
+Tic tac toe by Aleksi Lummila!
+Initial 1.0 finished 22.3.2024.
+"""
+
+from ai import Ai
 
 
 class Board:
@@ -12,6 +17,8 @@ class Board:
         self.pattern = 0
         self.turn = 1
 
+        self.ai = Ai()
+
     def draw(self):
         m = self.matrix
 
@@ -23,112 +30,19 @@ class Board:
         print(f"| {m[2][0]} | {m[2][1]} | {m[2][2]} |")
         print(" -----------")
 
-    def alt_ai(self):
-        m = self.matrix
+    def go_first(self):
+        self.matrix[1][1] = "O"
+        return
 
-        for y in range(3):
-            for x in range(3):
-                if m[y][x] == "X":
-                    # Expressions for x axis, columns
-                    left = x - 1 if x > 0 else 0
-                    right = x + 1 if x < 2 else 2
+    # Using the Ai class imported from ai.py
+    def move(self):
+        self.ai.move(self.matrix)
 
-                    # Expressions for the y axis, rows
-                    up = y - 1 if y > 0 else 0
-                    down = y + 1 if y < 2 else 2
+    # Update the board with player's input
+    def update(self, move_x, move_y):
+        self.matrix[move_x][move_y] = "X"
 
-                    ## ROWS, e.g. X AXEL!!! On the same list in list of lists
-                    # If there's an additional X on the left side of the X being checked and not on right
-                    if x == 1 and m[y][left] == "X" and m[y][right] == " ":
-                        if m[up][left] == "X" and m[down][left] == " ":
-                            m[down][left] = "O"
-                            return
-                        if m[down][left] == "X" and m[up][left] == "X":
-                            m[up][left] = "O"
-                            return
-
-                        m[y][right] = "O"
-                        return
-                    # If there's an additional X on the right side of the X being checked and not left
-                    if x == 1 and m[y][left] == " " and m[y][right] == "X":
-                        if m[up][right] == "X" and m[down][right] == " ":
-                            m[down][right] = "O"
-                            return
-                        if m[down][right] == "X" and m[up][right] == " ":
-                            m[up][right] = "O"
-                            return
-
-                        m[y][left] = "O"
-                        return
-                    # If the X is on the left side and there isn't any X on the right
-                    if x == 0 and m[y][right] == " ":
-                        if y > 0 and m[up][x] == "X" and m[down][x] == " ":
-                            m[down][x] = "O"
-                            return
-                        if y > 0 and m[down][x] == "X" and m[up][x] == " ":
-                            m[up][x] = "O"
-                            return
-
-                        m[y][right] = "O"
-                        return
-                    # If X is on the right side and there isn't an X on the left
-                    if x == 2 and m[y][left] == " ":
-                        if y < 2 and m[up][x] == "X" and m[down][x] == " ":
-                            m[down][x] = "O"
-                            return
-                        if y < 2 and m[down][x] == "X" and m[up][x] == " ":
-                            m[up][x] = "O"
-                            return
-
-                        m[y][left] = "O"
-                        return
-
-                    ## COLUMNS, e.g. Y AXEL!! On different lists in list of lists
-                    # If there's an additional X above of the X being checked and not below
-                    if y == 1 and m[up][x] == "X" and m[down][x] == " ":
-                        if m[up][left] == "X" and m[up][right] == " ":
-                            m[up][right] = "O"
-                            return
-                        if m[up][right] == "X" and m[up][left] == " ":
-                            m[up][left] = "O"
-                            return
-
-                        m[down][x] = "O"
-                        return
-                    # If there's an additional X below of the X being checked
-                    if y == 1 and m[up][x] == " " and m[down][x] == "X":
-                        m[up][x] = "O"
-                        return
-                    # If the X is on the top row and there isn't an X below
-                    if y == 0 and m[down][x] == " ":
-                        if m[y][right] == "X" and m[y][left] == " ":
-                            m[y][left] = "O"
-                            return
-                        if m[y][left] == "X" and m[y][right] == " ":
-                            m[y][right] = "O"
-                            return
-
-                        m[down][x] = "O"
-                        return
-                    # If X is on the bottom row and there isn't an X above
-                    if y == 2 and m[up][x] == " ":
-                        m[up][x] = "O"
-                        return
-
-                    # If player starts in the middle, fuckery:
-                    if y == 1 and x == 1:
-                        rand_y = random.randint(0, 2)
-                        rand_x = random.randint(0, 2)
-                        while m[rand_y][rand_x] != " ":
-                            rand_y = random.randint(0, 2)
-                            rand_x = random.randint(0, 2)
-
-                        m[rand_y][rand_x] = "O"
-                        return
-
-    def update(self, mover, move_x, move_y):
-        self.matrix[move_x][move_y] = "X" if mover == "Player" else "O"
-
+    # Checks for possible win conditions
     def check_for_winner(self):
         m = self.matrix
 
@@ -153,6 +67,17 @@ class Board:
         if win_check != 0:
             self.end_game(win_check)
 
+        # Rare case, no one wins:
+        for row in range(3):
+            for column in range(3):
+                if m[row][column] == " ":
+                    return
+
+        print("\nIt's a draw!\n")
+        self.draw()
+        exit()
+
+    # Returns one if three parameters are all "X" and 2 if it's "O", 0 else
     def who_won(self, one, two, three):
         if one == "X" and two == "X" and three == "X":
             return 1
@@ -161,6 +86,7 @@ class Board:
 
         return 0
 
+    # Uses who_won() return value set in check_for_winner() to print out the winner and the end board
     def end_game(self, winner):
         print(f"\n{'AI' if winner == 2 else "You"} won the game!\n")
         self.draw()
@@ -187,6 +113,10 @@ class Interface:
 board = Board()
 ui = Interface()
 
+difficulty = input("Enter 'HARD' to let the computer go first! ")
+if difficulty == "HARD":
+    board.go_first()
+
 while True:
     print("\nTic tac toe!")
     board.draw()
@@ -200,8 +130,8 @@ while True:
         player_input = ui.input()
         spot_check = board.matrix[player_input[0]][player_input[1]]
 
-    board.update("Player", player_input[0], player_input[1])
-
+    board.update(player_input[0], player_input[1])
     board.check_for_winner()
 
-    board.alt_ai()
+    board.move()
+    board.check_for_winner()
