@@ -51,6 +51,7 @@ class Pizza {
     additional ingredients */
     while (additional_ingredient != null) {
       ingredients.add(additional_ingredient);
+      print("${additional_ingredient} added!");
 
       additional_ingredient = stdin.readLineSync();
       if (additional_ingredient == "") {
